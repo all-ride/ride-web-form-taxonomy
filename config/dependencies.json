@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        {
+            "interfaces": ["ride\\library\\form\\row\\Row"],
+            "class": "ride\\library\\form\\row\\TagsRow",
+            "id": "tags"
+        }
+    ]
+}
