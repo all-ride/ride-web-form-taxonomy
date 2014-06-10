@@ -167,7 +167,7 @@ class TagsRow extends StringRow implements HtmlRow {
                 source: function (request, response) {
                     var url = "' . $this->autoCompleteUrl . '";
                     $.ajax({
-                        url: url.replace("%term%", request.term),
+                        url: url.replace(new RegExp("%term%", "g"), request.term),
                         dataType: "json",
                         success: function (data) {
                             response($.map(data, function(item) {
