@@ -54,6 +54,8 @@
 
             if (!tag || tag.length <= 0) { return; }
 
+            $self.removeAttr('required');
+
             // check if restricted only to the tagList suggestions
             if (opts.onlyTagList && undefined !== opts.tagList ){
 
@@ -70,7 +72,7 @@
                     if ( -1 === suggestion ) {
                         //console.log("tag:" + tag + " not in tagList, not adding it");
                         return;
-                    } 
+                    }
                 }
 
             }
@@ -150,7 +152,7 @@
                         lastTagObj.after($el);
                     } else {
                         $self.before($el);
-                    }                
+                    }
                 }
 
                 $el.find("#" + newTagRemoveId).on("click", $self, function(e) {
@@ -188,6 +190,10 @@
               privateMethods.refreshHiddenTagList.call($self);
               $self.trigger('tm:popped', [tagBeingRemoved, tagId]);
               // console.log(tlis);
+            }
+
+            if (tlid.length == 0 && $self.data('required') == 'required') {
+                $self.attr('required', 'required');
             }
         },
 
@@ -359,6 +365,7 @@
                 // prevent double-initialization of TagManager
                 if ($self.data('tagManager')) { return false; }
                 $self.data('tagManager', true);
+                $self.data('required', $self.attr('required'));
 
                 for (var i = 0; i < 5; i++) {
                   rndid += albet.charAt(Math.floor(Math.random() * albet.length));
