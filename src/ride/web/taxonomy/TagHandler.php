@@ -1,6 +1,6 @@
 <?php
 
-namespace ride\library\taxonomy;
+namespace ride\web\taxonomy;
 
 /**
  * Interface to process tags for a specific taxonomy backend

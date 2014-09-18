@@ -11,12 +11,13 @@
     ],
     "require": {
         "ride/lib-form": ">=0.8.0",
-        "ride/lib-validation": ">=0.2.0"
+        "ride/lib-validation": ">=0.2.0",
+        "ride/web-form": ">=0.4.4"
     },
     "autoload": {
         "psr-0": {
-            "ride\\library\\form\\row\\TagsRow": ["src/"],
-            "ride\\library\\taxonomy\\TagHandler": ["src/"]
+            "ride\\web\\form\\row\\TagsRow": ["src/"],
+            "ride\\web\\taxonomy\\TagHandler": ["src/"]
         }
     }
 }

@@ -1,14 +1,16 @@
 <?php
 
-namespace ride\library\form\row;
+namespace ride\web\form\row;
 
-use ride\library\taxonomy\TagHandler;
 use ride\library\validation\factory\ValidationFactory;
+
+use ride\web\form\row\AutoCompleteStringRow;
+use ride\web\taxonomy\TagHandler;
 
 /**
  * Tags row
  */
-class TagsRow extends StringRow implements HtmlRow {
+class TagsRow extends AutoCompleteStringRow implements HtmlRow {
 
     /**
      * Name of the tag handler option
@@ -17,34 +19,10 @@ class TagsRow extends StringRow implements HtmlRow {
     const OPTION_HANDLER = 'handler';
 
     /**
-     * Name of the auto complete URL option
-     * @var string
-     */
-    const OPTION_AUTO_COMPLETE_URL = 'autocomplete.url';
-
-    /**
-     * Name of the auto complete URL option
-     * @var string
-     */
-    const OPTION_AUTO_COMPLETE_MINIMUM = 'autocomplete.minimum';
-
-    /**
      * Instance of the tag handler
      * @var \ride\web\taxonomy\TagHandler
      */
     protected $tagHandler;
-
-    /**
-     * URL for auto completion
-     * @var string
-     */
-    protected $autoCompleteUrl;
-
-    /**
-     * Minimum number of characters for auto completion
-     * @var integer
-     */
-    protected $autoCompleteMinimum;
 
     /**
      * Constructs a new form row
@@ -59,8 +37,6 @@ class TagsRow extends StringRow implements HtmlRow {
         if ($handler) {
             $this->setTagHandler($handler);
         }
-
-        $this->setAutoComplete($this->getOption(self::OPTION_AUTO_COMPLETE_URL), $this->getOption(self::OPTION_AUTO_COMPLETE_MINIMUM, 2));
     }
 
     /**
@@ -70,19 +46,6 @@ class TagsRow extends StringRow implements HtmlRow {
      */
     public function setTagHandler(TagHandler $tagHandler) {
         $this->tagHandler = $tagHandler;
-    }
-
-    /**
-     * Sets a URL for auto completion
-     * @param string $url URL to fetch the results from. Use %term% placeholder
-     * to reserve a place for the term filter
-     * @param integer $minimum Minimum number of characters before perform auto
-     * completion
-     * @return null
-     */
-    public function setAutoComplete($url, $minimum = 2) {
-        $this->autoCompleteUrl = $url;
-        $this->autoCompleteMinimum = $minimum;
     }
 
     /**
@@ -118,17 +81,30 @@ class TagsRow extends StringRow implements HtmlRow {
     }
 
     /**
+     * Creates the widget for this row
+     * @param string $name
+     * @param mixed $default
+     * @param array $attributes
+     * @return \ride\library\form\widget\Widget
+     */
+    protected function createWidget($name, $default, array $attributes) {
+        if (isset($attributes['required'])) {
+            unset($attributes['required']);
+        }
+
+        return parent::createWidget($name, $default, $attributes);
+    }
+
+    /**
      * Gets all the javascript files which are needed for this row
      * @return array|null
      */
     public function getJavascripts() {
-        $javascripts = array();
+        $javascripts = parent::getJavascripts();
 
-        if ($this->autoCompleteUrl) {
-            $javascripts[] = 'js/jquery-ui.js';
+        if ($this->tagHandler) {
+            $javascripts[] = 'js/tagmanager.js';
         }
-
-        $javascripts[] = 'js/tagmanager.js';
 
         return $javascripts;
     }
@@ -138,6 +114,12 @@ class TagsRow extends StringRow implements HtmlRow {
      * @return array|null
     */
     public function getInlineJavascripts() {
+        $javascripts = parent::getInlineJavascripts();
+
+        if (!$this->tagHandler) {
+            return $javascripts;
+        }
+
         $value = $this->widget->getValue();
 
         $prefilled = array();
@@ -151,38 +133,15 @@ class TagsRow extends StringRow implements HtmlRow {
 
         $this->widget->setValue(null);
 
-        $token = ucfirst(substr(md5(microtime()), 0, 7));
-
-        $script = 'var tagInput' . $token .' = $("#' . $this->widget->getId() . '");';
-        $script .= 'tagInput' . $token . '.addClass("tagmanager");';
-        $script .= 'tagInput' . $token . '.tagsManager({
+        $script = '$("#' . $this->widget->getId() . '").addClass("tagmanager").tagsManager({
             prefilled: ' . json_encode($prefilled) . ',
             hiddenTagListName: "' . $this->widget->getName() .  '-list",
             delimiters: [13, 44] // enter, comma
         });';
 
-        if ($this->autoCompleteUrl) {
-            $script .= 'tagInput' . $token . '.autocomplete({
-                minLength: ' . $this->autoCompleteMinimum . ',
-                source: function (request, response) {
-                    var url = "' . $this->autoCompleteUrl . '";
-                    $.ajax({
-                        url: url.replace(new RegExp("%term%", "g"), request.term),
-                        dataType: "json",
-                        success: function (data) {
-                            response($.map(data, function(item) {
-                                return {
-                                    label: item,
-                                    value: item
-                                }
-                            }));
-                        }
-                    });
-                },
-            });';
-        }
+        $javascripts[] = $script;
 
-        return array($script);
+        return $javascripts;
     }
 
     /**
