@@ -10,7 +10,7 @@ use ride\web\taxonomy\TagHandler;
 /**
  * Tags row
  */
-class TagsRow extends AutoCompleteStringRow implements HtmlRow {
+class TagsRow extends AutoCompleteStringRow {
 
     /**
      * Name of the tag handler option
