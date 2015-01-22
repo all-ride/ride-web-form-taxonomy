@@ -3,7 +3,10 @@
         {
             "interfaces": ["ride\\library\\form\\row\\Row"],
             "class": "ride\\web\\form\\row\\TagsRow",
-            "id": "tags"
+            "id": "tags",
+            "calls": [
+                "setRequest"
+            ]
         }
     ]
 }

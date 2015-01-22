@@ -2,6 +2,7 @@
 
 namespace ride\web\form\row;
 
+use ride\library\http\Request;
 use ride\library\validation\factory\ValidationFactory;
 
 use ride\web\form\row\AutoCompleteStringRow;
@@ -25,6 +26,12 @@ class TagsRow extends AutoCompleteStringRow {
     protected $tagHandler;
 
     /**
+     * Instance of the request to retrieve the base URL
+     * @var \ride\library\http\Request
+     */
+    protected $request;
+
+    /**
      * Constructs a new form row
      * @param string $name Name of the row
      * @param array $options Extra options for the row or type implementation
@@ -46,6 +53,15 @@ class TagsRow extends AutoCompleteStringRow {
      */
     public function setTagHandler(TagHandler $tagHandler) {
         $this->tagHandler = $tagHandler;
+    }
+
+    /**
+     * Sets the request to retrieve the base URL
+     * @param \ride\library\http\Request $request
+     * @return null
+     */
+    public function setRequest(Request $request) {
+        $this->request = $request;
     }
 
     /**
@@ -103,7 +119,7 @@ class TagsRow extends AutoCompleteStringRow {
         $javascripts = parent::getJavascripts();
 
         if ($this->tagHandler) {
-            $javascripts[] = 'js/tagmanager.js';
+            $javascripts[] = $this->request->getBaseUrl() . '/js/tagmanager.js';
         }
 
         return $javascripts;
