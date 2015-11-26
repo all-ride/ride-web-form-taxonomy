@@ -72,25 +72,11 @@ class TagsRow extends AutoCompleteStringRow {
     public function processData(array $values) {
         $isChanged = false;
 
-        if (isset($values[$this->name . '-list'])) {
-            // values from the tag manager
-            $this->data = explode(',', $values[$this->name . '-list']);
-
-            $isChanged = true;
+        if (isset($values[$this->name]) && $values[$this->name]) {
+            $this->data = explode(',', $values[$this->name]);
         }
 
-        if (isset($values[$this->name])) {
-            // value not added to tags just yet, we take it
-            if ($isChanged) {
-                $this->data[] = $values[$this->name];
-            } else {
-                $this->data = array($values[$this->name]);
-            }
-
-            $isChanged = true;
-        }
-
-        if ($isChanged && $this->tagHandler) {
+        if ($this->tagHandler) {
             // value has changed, process the tags
             $this->data = $this->tagHandler->processTags($this->data);
         }
@@ -108,64 +94,13 @@ class TagsRow extends AutoCompleteStringRow {
             unset($attributes['required']);
         }
 
+        if (isset($attributes['class'])) {
+            $attributes['class'] .= ' js-tags';
+        } else {
+            $attributes['class'] = 'js-tags';
+        }
+
         return parent::createWidget($name, $default, $attributes);
-    }
-
-    /**
-     * Gets all the javascript files which are needed for this row
-     * @return array|null
-     */
-    public function getJavascripts() {
-        $javascripts = parent::getJavascripts();
-
-        if ($this->tagHandler) {
-            $javascripts[] = $this->request->getBaseUrl() . '/js/tagmanager.js';
-        }
-
-        return $javascripts;
-    }
-
-    /**
-     * Gets all the inline javascripts which are needed for this row
-     * @return array|null
-    */
-    public function getInlineJavascripts() {
-        $javascripts = parent::getInlineJavascripts();
-
-        if (!$this->tagHandler) {
-            return $javascripts;
-        }
-
-        $value = $this->widget->getValue();
-
-        $prefilled = array();
-        if (is_array($value)) {
-            foreach ($value as $tag) {
-                $prefilled[] = (string) $tag;
-            }
-        } elseif ($value) {
-            $prefilled = array($value);
-        }
-
-        $this->widget->setValue(null);
-
-        $script = '$("#' . $this->widget->getId() . '").addClass("tagmanager").tagsManager({
-            prefilled: ' . json_encode($prefilled) . ',
-            hiddenTagListName: "' . $this->widget->getName() .  '-list",
-            delimiters: [13, 44] // enter, comma
-        });';
-
-        $javascripts[] = $script;
-
-        return $javascripts;
-    }
-
-    /**
-     * Gets all the stylesheets which are needed for this row
-     * @return array|null
-     */
-    public function getStyles() {
-        return array('css/tagmanager.css');
     }
 
 }
