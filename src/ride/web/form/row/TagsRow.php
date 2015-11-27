@@ -100,7 +100,27 @@ class TagsRow extends AutoCompleteStringRow {
             $attributes['class'] = 'js-tags';
         }
 
+        if (is_array($default)) {
+            $default = implode(',', $default);
+        }
+
         return parent::createWidget($name, $default, $attributes);
     }
 
+    /**
+     * Sets the data to this row
+     * @param mixed $data
+     * @return null
+     */
+    public function setData($data) {
+        $this->data = $data;
+
+        if ($this->widget) {
+            if (is_array($data)) {
+                $data = implode(',', $data);
+            }
+
+            $this->widget->setValue($data);
+        }
+    }
 }
