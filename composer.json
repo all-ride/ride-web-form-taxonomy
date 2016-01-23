@@ -2,7 +2,7 @@
     "name": "ride/web-form-taxonomy",
     "description": "Tags row for the form library of the Ride framework",
     "license": "MIT",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "authors": [
         {
             "name": "Joris Vandeweerd",
