@@ -76,7 +76,7 @@ class TagsRow extends AutoCompleteStringRow {
             $this->data = explode(',', $values[$this->name]);
         }
 
-        if ($this->tagHandler) {
+        if ($this->tagHandler && $this->data !== null) {
             // value has changed, process the tags
             $this->data = $this->tagHandler->processTags($this->data);
         }
