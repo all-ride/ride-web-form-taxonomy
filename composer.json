@@ -2,7 +2,6 @@
     "name": "ride/web-form-taxonomy",
     "description": "Tags row for the form library of the Ride framework",
     "license": "MIT",
-    "version": "0.3.3",
     "authors": [
         {
             "name": "Joris Vandeweerd",
@@ -10,9 +9,13 @@
         }
     ],
     "require": {
-        "ride/lib-form": ">=0.8.0",
-        "ride/lib-validation": ">=0.2.0",
-        "ride/web-form": ">=0.4.4"
+        "ride/app": "^1.0.0",
+        "ride/app-form": "^1.0.0",
+        "ride/app-validation": "^1.0.0",
+        "ride/lib-form": "^1.0.0",
+        "ride/lib-validation": "^1.0.0",
+        "ride/web": "^1.0.0",
+        "ride/web-form": "^1.0.0"
     },
     "autoload": {
         "psr-0": {
