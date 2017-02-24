@@ -74,6 +74,8 @@ class TagsRow extends AutoCompleteStringRow {
 
         if (isset($values[$this->name]) && $values[$this->name]) {
             $this->data = explode(',', $values[$this->name]);
+        } else {
+            $this->data = array();
         }
 
         if ($this->tagHandler && $this->data !== null) {
