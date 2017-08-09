@@ -6,6 +6,7 @@ use ride\library\http\Request;
 use ride\library\validation\factory\ValidationFactory;
 
 use ride\web\form\row\AutoCompleteStringRow;
+use ride\web\form\widget\TagsWidget;
 use ride\web\taxonomy\TagHandler;
 
 /**
@@ -102,27 +103,7 @@ class TagsRow extends AutoCompleteStringRow {
             $attributes['class'] = 'js-tags';
         }
 
-        if (is_array($default)) {
-            $default = implode(',', $default);
-        }
-
-        return parent::createWidget($name, $default, $attributes);
+        return new TagsWidget($this->type, $name, $default, $attributes);
     }
 
-    /**
-     * Sets the data to this row
-     * @param mixed $data
-     * @return null
-     */
-    public function setData($data) {
-        $this->data = $data;
-
-        if ($this->widget) {
-            if (is_array($data)) {
-                $data = implode(',', $data);
-            }
-
-            $this->widget->setValue($data);
-        }
-    }
 }

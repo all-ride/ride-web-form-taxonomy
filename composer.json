@@ -20,6 +20,7 @@
     "autoload": {
         "psr-0": {
             "ride\\web\\form\\row\\TagsRow": ["src/"],
+            "ride\\web\\form\\widget\\TagsWidget": ["src/"],
             "ride\\web\\taxonomy\\TagHandler": ["src/"]
         }
     }
