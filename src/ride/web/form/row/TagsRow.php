@@ -73,7 +73,7 @@ class TagsRow extends AutoCompleteStringRow {
     public function processData(array $values) {
         $isChanged = false;
 
-        if (isset($values[$this->name]) && $values[$this->name]) {
+        if (isset($values[$this->name]) && is_string($values[$this->name]) && $values[$this->name]) {
             $this->data = explode(',', $values[$this->name]);
         } else {
             $this->data = array();
@@ -103,7 +103,9 @@ class TagsRow extends AutoCompleteStringRow {
             $attributes['class'] = 'js-tags';
         }
 
-        return new TagsWidget($this->type, $name, $default, $attributes);
+        $widget = parent::createWidget($name, $default, $attributes);
+
+        return new TagsWidget($this->type, $name, $default, $widget->getAttributes());
     }
 
 }

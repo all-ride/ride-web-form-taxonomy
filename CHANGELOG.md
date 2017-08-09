@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.3] - 2017-08-09
+### Added
+- Fixed the autocomplete attributes after 1.0.2
+
 ## [1.0.2] - 2017-08-09
 ### Added
 - TagsWidget to fix validation handling
