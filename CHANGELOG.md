@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.2] - 2016-02-24
+## [1.0.2] - 2017-08-09
 ### Added
 - TagsWidget to fix validation handling
 
